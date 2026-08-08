@@ -1,0 +1,1 @@
+import Link from "next/link";export default async function Page({params}:{params:Promise<{id:string}>}){return <section className="account-card"><h1>{(await params).id}</h1><p>Sifarişin şəxsi məlumatlarını görmək üçün telefon nömrənizlə təhlükəsiz təsdiq edin.</p><Link className="primary-link" href="/order/track">Təhlükəsiz izləmə</Link></section>}

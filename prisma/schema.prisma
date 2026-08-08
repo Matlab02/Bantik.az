@@ -1,0 +1,493 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  WAREHOUSE_MANAGER
+  BRANCH_MANAGER
+  SALES_STAFF
+  CUSTOMER
+}
+enum BranchType {
+  WAREHOUSE
+  STORE
+}
+enum OrderStatus {
+  NEW
+  CONTACTING_CUSTOMER
+  CONFIRMED
+  PREPARING
+  READY
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+enum InventoryMovementType {
+  SALE
+  STOCK_IN
+  ORDER_RESERVATION
+  ORDER_RELEASE
+  ORDER_FULFILLMENT
+  TRANSFER_OUT
+  TRANSFER_IN
+  RETURN
+  DAMAGED
+  ADJUSTMENT
+  INITIAL_STOCK
+}
+enum TransferStatus {
+  DRAFT
+  REQUESTED
+  APPROVED
+  IN_TRANSIT
+  RECEIVED
+  CANCELLED
+}
+
+model User {
+  id String @id @default(cuid())
+  name String?
+  email String @unique
+  passwordHash String?
+  phone String?
+  isActive Boolean @default(true)
+  role Role @default(CUSTOMER)
+  branchId String?
+  branch Branch? @relation(fields:[branchId], references:[id])
+  customer Customer?
+  assignedOrders Order[] @relation("AssignedUser")
+  orderNotes OrderNote[]
+  inventoryMovements InventoryMovement[]
+  createdTransfers StockTransfer[] @relation("TransferCreatedBy")
+  approvedTransfers StockTransfer[] @relation("TransferApprovedBy")
+  receivedTransfers StockTransfer[] @relation("TransferReceivedBy")
+  auditLogs AuditLog[]
+  notifications AdminNotification[]
+  loginHistory LoginHistory[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([role,isActive])
+  @@index([branchId,isActive])
+}
+
+model Category {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  parentId String?
+  parent Category? @relation("CategoryTree", fields:[parentId], references:[id])
+  children Category[] @relation("CategoryTree")
+  products Product[]
+  isActive Boolean @default(true)
+}
+
+model Brand {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  logoUrl String?
+  products Product[]
+  isActive Boolean @default(true)
+}
+
+model Product {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  sku String @unique
+  barcode String? @unique
+  shortDescription String?
+  description String?
+  usageInstructions String?
+  ingredients String?
+  skinType String?
+  productType String?
+  price Decimal @db.Decimal(10,2)
+  compareAtPrice Decimal? @db.Decimal(10,2)
+  brandId String
+  brand Brand @relation(fields:[brandId], references:[id])
+  categoryId String
+  category Category @relation(fields:[categoryId], references:[id])
+  variants ProductVariant[]
+  images ProductImage[]
+  orderItems OrderItem[]
+  inventory Inventory[]
+  inventoryMovements InventoryMovement[]
+  transferItems StockTransferItem[]
+  active Boolean @default(true)
+  featured Boolean @default(false)
+  isNew Boolean @default(false)
+  bestseller Boolean @default(false)
+  seoTitle String?
+  seoDescription String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([brandId,active])
+  @@index([categoryId,active])
+  @@index([active,createdAt])
+}
+
+model ProductVariant {
+  id String @id @default(cuid())
+  productId String
+  product Product @relation(fields:[productId], references:[id], onDelete:Cascade)
+  sku String @unique
+  name String
+  barcode String? @unique
+  colorName String?
+  colorHex String?
+  volume String?
+  size String?
+  priceOverride Decimal? @db.Decimal(10,2)
+  active Boolean @default(true)
+  images ProductImage[]
+  inventory Inventory[]
+  orderItems OrderItem[]
+  inventoryMovements InventoryMovement[]
+  transferItems StockTransferItem[]
+}
+
+model ProductImage {
+  id String @id @default(cuid())
+  productId String
+  product Product @relation(fields:[productId], references:[id], onDelete:Cascade)
+  variantId String?
+  variant ProductVariant? @relation(fields:[variantId], references:[id], onDelete:SetNull)
+  url String
+  alt String?
+  position Int @default(0)
+  isPrimary Boolean @default(false)
+}
+
+model Branch {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  code String @unique
+  type BranchType @default(STORE)
+  address String
+  phone String?
+  isActive Boolean @default(true)
+  inventory Inventory[]
+  users User[]
+  assignedOrders Order[] @relation("AssignedBranch")
+  movements InventoryMovement[]
+  outgoingTransfers StockTransfer[] @relation("TransferFromBranch")
+  incomingTransfers StockTransfer[] @relation("TransferToBranch")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Inventory {
+  id String @id @default(cuid())
+  branchId String
+  branch Branch @relation(fields:[branchId], references:[id])
+  productId String
+  product Product @relation(fields:[productId], references:[id])
+  variantId String?
+  variant ProductVariant? @relation(fields:[variantId], references:[id])
+  variantKey String @default("")
+  quantity Int @default(0)
+  reservedQuantity Int @default(0)
+  minimumStock Int @default(3)
+  updatedAt DateTime @updatedAt
+  @@unique([branchId,productId,variantKey])
+  @@index([branchId,quantity])
+  @@index([productId])
+  @@index([variantId])
+}
+
+model InventoryMovement {
+  id String @id @default(cuid())
+  branchId String
+  branch Branch @relation(fields:[branchId], references:[id])
+  productId String
+  product Product @relation(fields:[productId], references:[id])
+  variantId String?
+  variant ProductVariant? @relation(fields:[variantId], references:[id], onDelete:SetNull)
+  type InventoryMovementType
+  quantity Int
+  quantityBefore Int
+  quantityAfter Int
+  referenceType String?
+  referenceId String?
+  note String?
+  createdById String?
+  createdBy User? @relation(fields:[createdById], references:[id], onDelete:SetNull)
+  createdAt DateTime @default(now())
+  @@index([branchId,createdAt])
+  @@index([productId,createdAt])
+  @@index([type,createdAt])
+}
+
+model Customer {
+  id String @id @default(cuid())
+  userId String? @unique
+  user User? @relation(fields:[userId], references:[id], onDelete:SetNull)
+  firstName String
+  lastName String
+  phone String @unique
+  email String?
+  addresses CustomerAddress[]
+  orders Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([updatedAt])
+}
+
+model CustomerAddress {
+  id String @id @default(cuid())
+  customerId String
+  customer Customer @relation(fields:[customerId], references:[id], onDelete:Cascade)
+  label String
+  city String
+  address String
+  isDefault Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id String @id @default(cuid())
+  orderNumber String @unique
+  idempotencyKey String? @unique
+  status OrderStatus @default(NEW)
+  customerId String?
+  customer Customer? @relation(fields:[customerId], references:[id], onDelete:SetNull)
+  assignedBranchId String?
+  assignedBranch Branch? @relation("AssignedBranch", fields:[assignedBranchId], references:[id])
+  assignedUserId String?
+  assignedUser User? @relation("AssignedUser", fields:[assignedUserId], references:[id])
+  customerName String
+  phone String
+  email String?
+  address String
+  city String
+  deliveryNote String?
+  subtotal Decimal @db.Decimal(10,2)
+  discountTotal Decimal @default(0) @db.Decimal(10,2)
+  total Decimal @db.Decimal(10,2)
+  source String @default("WEBSITE")
+  items OrderItem[]
+  history OrderStatusHistory[]
+  notes OrderNote[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([status,createdAt])
+  @@index([phone,createdAt])
+  @@index([assignedBranchId,createdAt])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields:[orderId], references:[id], onDelete:Cascade)
+  productId String?
+  product Product? @relation(fields:[productId], references:[id], onDelete:SetNull)
+  variantId String?
+  variant ProductVariant? @relation(fields:[variantId], references:[id], onDelete:SetNull)
+  productName String
+  sku String
+  variantName String?
+  price Decimal @db.Decimal(10,2)
+  quantity Int
+  total Decimal @db.Decimal(10,2)
+}
+model OrderStatusHistory {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields:[orderId], references:[id], onDelete:Cascade)
+  previousStatus OrderStatus?
+  newStatus OrderStatus
+  changedBy String
+  note String?
+  createdAt DateTime @default(now())
+}
+
+model OrderNote {
+  id String @id @default(cuid())
+  orderId String
+  order Order @relation(fields:[orderId], references:[id], onDelete:Cascade)
+  authorId String?
+  author User? @relation(fields:[authorId], references:[id], onDelete:SetNull)
+  note String
+  createdAt DateTime @default(now())
+}
+
+model OrderSequence {
+  year Int @id
+  value Int @default(0)
+}
+
+model StockTransfer {
+  id String @id @default(cuid())
+  transferNumber String @unique
+  fromBranchId String
+  fromBranch Branch @relation("TransferFromBranch", fields:[fromBranchId], references:[id])
+  toBranchId String
+  toBranch Branch @relation("TransferToBranch", fields:[toBranchId], references:[id])
+  status TransferStatus @default(DRAFT)
+  createdById String?
+  createdBy User? @relation("TransferCreatedBy", fields:[createdById], references:[id], onDelete:SetNull)
+  approvedById String?
+  approvedBy User? @relation("TransferApprovedBy", fields:[approvedById], references:[id], onDelete:SetNull)
+  receivedById String?
+  receivedBy User? @relation("TransferReceivedBy", fields:[receivedById], references:[id], onDelete:SetNull)
+  note String?
+  items StockTransferItem[]
+  createdAt DateTime @default(now())
+  shippedAt DateTime?
+  receivedAt DateTime?
+  @@index([status,createdAt])
+  @@index([fromBranchId,status])
+  @@index([toBranchId,status])
+}
+
+model StockTransferItem {
+  id String @id @default(cuid())
+  transferId String
+  transfer StockTransfer @relation(fields:[transferId], references:[id], onDelete:Cascade)
+  productId String
+  product Product @relation(fields:[productId], references:[id])
+  variantId String?
+  variant ProductVariant? @relation(fields:[variantId], references:[id], onDelete:SetNull)
+  requestedQuantity Int
+  shippedQuantity Int @default(0)
+  receivedQuantity Int @default(0)
+}
+
+model TransferSequence {
+  year Int @id
+  value Int @default(0)
+}
+
+model InventoryOrderAction {
+  id String @id @default(cuid())
+  orderId String
+  action String
+  createdAt DateTime @default(now())
+  @@unique([orderId,action])
+}
+
+model AuditLog {
+  id String @id @default(cuid())
+  userId String?
+  user User? @relation(fields:[userId], references:[id], onDelete:SetNull)
+  action String
+  entityType String
+  entityId String
+  before Json?
+  after Json?
+  metadata Json?
+  ip String?
+  createdAt DateTime @default(now())
+  @@index([entityType,entityId])
+  @@index([createdAt])
+  @@index([userId,createdAt])
+}
+
+model SiteSetting {
+  id String @id @default(cuid())
+  siteName String @default("BANTİK Beauty Shop")
+  slogan String @default("Gözəlliyin öz ritmi")
+  logoUrl String @default("/brand/bantik-wordmark.png")
+  faviconUrl String @default("/favicon.ico")
+  phone String?
+  whatsapp String?
+  email String?
+  address String?
+  instagram String?
+  tiktok String?
+  facebook String?
+  orderPrefix String @default("BNT")
+  defaultCity String @default("Bakı")
+  checkoutMessage String?
+  defaultMinimumStock Int @default(3)
+  lowStockBehavior String @default("ALERT")
+  seoTitle String?
+  seoDescription String?
+  ogImageUrl String?
+  updatedById String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CmsSection {
+  id String @id @default(cuid())
+  key String @unique
+  name String
+  enabled Boolean @default(true)
+  sortOrder Int @default(0)
+  config Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HeroSlide {
+  id String @id @default(cuid())
+  desktopImage String
+  mobileImage String
+  title String
+  subtitle String?
+  ctaText String?
+  ctaLink String?
+  alignment String @default("LEFT")
+  active Boolean @default(true)
+  startAt DateTime?
+  endAt DateTime?
+  sortOrder Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([active,startAt,endAt])
+}
+
+model CampaignBanner {
+  id String @id @default(cuid())
+  name String
+  desktopImage String
+  mobileImage String
+  title String
+  subtitle String?
+  ctaText String?
+  link String?
+  active Boolean @default(true)
+  startAt DateTime?
+  endAt DateTime?
+  position String
+  sortOrder Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([position,active,startAt,endAt])
+}
+
+model AdminNotification {
+  id String @id @default(cuid())
+  userId String?
+  user User? @relation(fields:[userId], references:[id], onDelete:Cascade)
+  type String
+  title String
+  message String
+  link String?
+  readAt DateTime?
+  createdAt DateTime @default(now())
+  @@index([userId,readAt,createdAt])
+}
+
+model LoginHistory {
+  id String @id @default(cuid())
+  userId String?
+  user User? @relation(fields:[userId], references:[id], onDelete:SetNull)
+  email String
+  ip String?
+  userAgent String?
+  success Boolean
+  createdAt DateTime @default(now())
+  @@index([email,createdAt])
+  @@index([success,createdAt])
+}

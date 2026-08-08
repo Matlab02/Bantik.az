@@ -1,0 +1,1 @@
+import {ProductForm} from "@/components/admin/product-form";export default function Page(){return <><div className="admin-head"><div><span>KATALOQ</span><h1>Yeni məhsul</h1></div></div><ProductForm/></>}

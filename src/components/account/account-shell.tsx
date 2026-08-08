@@ -1,0 +1,2 @@
+import Link from "next/link";
+export function AccountShell({ children }: { children: React.ReactNode }) { return <main className="container account-page"><div className="breadcrumbs"><Link href="/">Ana səhifə</Link> / Hesabım</div><div className="account-layout"><nav><h2>Hesabım</h2><Link href="/account">İcmal</Link><Link href="/account/orders">Sifarişlərim</Link><Link href="/account/wishlist">Seçilmişlər</Link><Link href="/account/addresses">Ünvanlarım</Link><Link href="/account/profile">Profil</Link></nav><div>{children}</div></div></main>; }

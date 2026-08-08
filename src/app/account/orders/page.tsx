@@ -1,0 +1,1 @@
+import Link from "next/link";export default function Page(){return <section className="account-card"><h1>Sifarişlərim</h1><p>Guest sifarişlər məxfilik üçün yalnız sifariş nömrəsi və telefonla göstərilir.</p><Link className="primary-link" href="/order/track">Sifarişimi tap</Link></section>}

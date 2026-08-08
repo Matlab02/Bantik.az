@@ -1,0 +1,1 @@
+import type {Metadata} from "next";import {Header} from "@/components/layout/header";import {MobileNav} from "@/components/layout/mobile-nav";import {WishlistView} from "@/components/commerce/wishlist-view";export const metadata:Metadata={title:"Seçilmişlər",robots:{index:false}};export default function Wishlist(){return <><Header/><WishlistView/><MobileNav/></>}

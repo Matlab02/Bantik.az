@@ -1,0 +1,1 @@
+import type {Metadata} from "next";import {Header} from "@/components/layout/header";import {MobileNav} from "@/components/layout/mobile-nav";import {CartView} from "@/components/commerce/cart-view";export const metadata:Metadata={title:"Səbət",robots:{index:false}};export default function Cart(){return <><Header/><CartView/><MobileNav/></>}

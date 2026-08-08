@@ -1,0 +1,3 @@
+import {z} from "zod";
+export const productSchema=z.object({name:z.string().min(2),slug:z.string().min(2).regex(/^[a-z0-9-]+$/),sku:z.string().min(3),barcode:z.string().optional(),brandId:z.string().min(1),categoryId:z.string().min(1),shortDescription:z.string().max(240),description:z.string().min(10),usageInstructions:z.string(),ingredients:z.string(),skinType:z.string(),productType:z.string(),price:z.coerce.number().positive(),compareAtPrice:z.coerce.number().positive().optional(),active:z.boolean().default(true),featured:z.boolean().default(false),isNew:z.boolean().default(false),bestseller:z.boolean().default(false)});
+export type ProductInput=z.infer<typeof productSchema>;

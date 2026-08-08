@@ -1,0 +1,21 @@
+export type StockStatus="Stokda"|"Az qalıb"|"Stokda yoxdur";
+export type CatalogProduct={id:string;name:string;slug:string;sku:string;barcode:string;brand:string;brandSlug:string;category:string;categorySlug:string;shortDescription:string;description:string;usageInstructions:string;ingredients:string;skinType:string;productType:string;price:number;compareAtPrice?:number;active:boolean;featured:boolean;isNew:boolean;bestseller:boolean;image:string;images:string[];stock:StockStatus;colors:{name:string;hex:string}[];volumes:string[]};
+
+export const categories=[
+  {name:"Makiyaj",slug:"makiyaj",image:"/categories/makeup-v1.png"},{name:"Üz qulluğu",slug:"uz-qullugu",image:"/categories/skincare-v1.png"},{name:"Ətir",slug:"etir",image:"/categories/fragrance-v1.png"},{name:"Saç baxımı",slug:"sac-baximi",image:"/categories/haircare-v1.png"},{name:"Bədən baxımı",slug:"beden-baximi",image:"/campaigns/bantik-skincare-v1.png"},{name:"Dırnaq",slug:"dirnaq",image:"/categories/makeup-v1.png"},{name:"Aksesuarlar",slug:"aksesuarlar",image:"/categories/gift-sets-v1.png"},{name:"Hədiyyələr",slug:"hediyyeler",image:"/categories/gift-sets-v1.png"}
+];
+export const brands=["Dior","Chanel","Lancôme","M·A·C","The Ordinary","YSL","Estée Lauder","Kérastase","Clinique","NARS"].map(name=>({name,slug:name.toLocaleLowerCase("az").replaceAll("·","").replaceAll("é","e").replaceAll("ô","o").replaceAll(" ","-")}));
+const images=["/products/lip-oil-v1.png","/products/floral-perfume-v1.png","/products/niacinamide-v1.png","/products/lipstick-v1.png","/categories/skincare-v1.png","/categories/makeup-v1.png","/categories/fragrance-v1.png","/categories/haircare-v1.png"];
+const names=["Glow Lip Oil","Velvet Matte Lipstick","Luminous Silk Foundation","Radiant Concealer","Hydra Repair Serum","Niacinamide Balance Serum","Barrier Comfort Cream","Gentle Cleansing Balm","Rose Signature Eau de Parfum","Noir Intense Eau de Parfum","Shine Repair Hair Oil","Volume Ritual Mask"];
+const productTypes=["Dodaq yağı","Pomada","Tonal krem","Konsiler","Serum","Serum","Nəmləndirici","Təmizləyici","Qadın ətri","Uniseks ətr","Saç yağı","Saç maskası"];
+const skinTypes=["Bütün dəri tipləri","Bütün dəri tipləri","Normal və quru","Bütün dəri tipləri","Quru və həssas","Yağlı və qarışıq","Quru və həssas","Bütün dəri tipləri","Bütün dəri tipləri","Bütün dəri tipləri","Bütün saç tipləri","Quru saçlar"];
+
+export const products:CatalogProduct[]=Array.from({length:48},(_,i)=>{
+  const base=i%names.length, cat=categories[(base<4?0:base<8?1:base<10?2:3)%categories.length], brand=brands[i%brands.length], edition=Math.floor(i/names.length)+1;
+  const price=24.9+(i%10)*8+edition*2;
+  const slug=`${brand.slug}-${names[base].toLowerCase().replaceAll(" ","-")}-${edition}`;
+  return {id:`product-${i+1}`,name:`${names[base]} ${edition>1?`No. ${edition}`:""}`.trim(),slug,sku:`BNT-${String(i+101).padStart(5,"0")}`,barcode:`869${String(1000000000+i)}`,brand:brand.name,brandSlug:brand.slug,category:cat.name,categorySlug:cat.slug,shortDescription:"Gündəlik gözəllik ritualı üçün seçilmiş premium formula.",description:"BANTİK demo kataloqu üçün hazırlanmış nümunə məhsul məlumatıdır. Rahat tekstura və zərif nəticə təqdim edən formula gündəlik istifadəyə uyğundur.",usageInstructions:"Təmiz dəriyə və ya uyğun baxım mərhələsində az miqdarda tətbiq edin. Məhsul tipinə uyğun olaraq gün ərzində yeniləyin.",ingredients:"Demo tərkib məlumatı: aqua, glycerin, seçilmiş yumşaldıcı və nəmləndirici komponentlər.",skinType:skinTypes[base],productType:productTypes[base],price:Number(price.toFixed(2)),compareAtPrice:i%3!==1?Number((price*1.22).toFixed(2)):undefined,active:true,featured:i%5===0,isNew:i%4===0,bestseller:i%3===0,image:images[base%images.length],images:[images[base%images.length],images[(base+1)%images.length],images[(base+2)%images.length]],stock:i%11===0?"Stokda yoxdur":i%4===0?"Az qalıb":"Stokda",colors:base<4?[{name:"Rosewood",hex:"#9e4d56"},{name:"Classic Red",hex:"#b51f2a"},{name:"Nude",hex:"#c78f7d"}]:[],volumes:base>=4?["30 ml","50 ml"]:["3.2 g"]};
+});
+
+export const getProduct=(slug:string)=>products.find(p=>p.slug===slug);
+export const money=(n:number)=>new Intl.NumberFormat("az-AZ",{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)+" ₼";

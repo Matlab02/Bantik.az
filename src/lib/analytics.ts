@@ -1,0 +1,1 @@
+export type CommerceEvent="add_to_cart"|"begin_checkout"|"request_order"|"wishlist_add";export function trackEvent(name:CommerceEvent,payload:Record<string,unknown>={}){if(typeof window!=="undefined")window.dispatchEvent(new CustomEvent("bantik:analytics",{detail:{name,payload}}))}

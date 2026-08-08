@@ -1,0 +1,1 @@
+import {LocalProfile} from "@/components/account/local-profile";export default function Page(){return <section className="account-card"><h1>Profil məlumatları</h1><LocalProfile mode="profile"/></section>}

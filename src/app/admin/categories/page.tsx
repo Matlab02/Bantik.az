@@ -1,0 +1,1 @@
+import {categories} from "@/lib/catalog";export default function Page(){return <><div className="admin-head"><div><span>KATALOQ</span><h1>Kateqoriyalar</h1></div></div><div className="simple-admin-grid">{categories.map(x=><div key={x.slug}><b>{x.name}</b><span>/{x.slug}</span></div>)}</div></>}

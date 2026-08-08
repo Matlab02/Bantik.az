@@ -1,0 +1,454 @@
+/* Readability pass: keep the compact beauty retail rhythm without tiny copy. */
+body {
+  font-size: 14px;
+}
+
+.ref-header .benefit-bar {
+  font-size: 10px;
+}
+
+.ref-header .category-inner a {
+  font-size: 11px;
+}
+
+.ref-header .search-box span,
+.ref-header .head-actions span {
+  font-size: 10px;
+}
+
+.ref-hero-copy > span {
+  font-size: 10px;
+}
+
+.ref-hero-copy p {
+  font-size: 15px;
+}
+
+.ref-hero-copy > a {
+  font-size: 10px;
+}
+
+.ref-hero-rail small {
+  font-size: 9px;
+}
+
+.ref-hero-rail b {
+  font-size: 16px;
+}
+
+.ref-trust b {
+  font-size: 11px;
+}
+
+.ref-trust small {
+  font-size: 9px;
+}
+
+.ref-title > span {
+  font-size: 10px;
+}
+
+.ref-title p {
+  max-width: 610px;
+  font-size: 13px;
+}
+
+.ref-section-head > a {
+  font-size: 10px;
+}
+
+.ref-category-grid b {
+  font-size: 20px;
+}
+
+.ref-luxury-ticker span {
+  font-size: 14px;
+}
+
+.ref-editorial-large small,
+.ref-editorial-small small {
+  font-size: 9px;
+}
+
+.ref-editorial-large span {
+  font-size: 10px;
+}
+
+.ref-editorial-small b {
+  font-size: 24px;
+}
+
+.ref-product-tabs a {
+  font-size: 10px;
+}
+
+.product-info > strong {
+  font-size: 10px !important;
+}
+
+.product-info h3,
+.ref-products .product-info h3,
+.gratis-catalog-grid .product-info h3,
+.gratis-product-page .related .product-info h3 {
+  min-height: 40px;
+  font-size: 13px !important;
+  line-height: 1.45;
+}
+
+.product-info .stock {
+  font-size: 9px;
+}
+
+.card-rating span {
+  font-size: 10px;
+}
+
+.card-rating small,
+.product-info .card-swatches small {
+  font-size: 9px;
+}
+
+.prices b,
+.ref-products .prices b {
+  font-size: 16px !important;
+}
+
+.prices del,
+.ref-products .prices del {
+  font-size: 10px;
+}
+
+.ref-products .add-cart,
+.gratis-catalog-grid .add-cart,
+.gratis-product-page .related .add-cart {
+  font-size: 10px !important;
+}
+
+.ref-product-progress > span,
+.ref-product-progress > a {
+  font-size: 10px;
+}
+
+.ref-fragrance small {
+  font-size: 10px;
+}
+
+.ref-fragrance b {
+  font-size: 10px;
+}
+
+.ref-section-head .ref-title h2,
+.ref-title h2 {
+  font-size: 42px;
+}
+
+/* Catalogue */
+.gratis-catalog .breadcrumbs,
+.gratis-product-page .breadcrumbs {
+  font-size: 11px;
+}
+
+.gratis-catalog-hero > div:first-child > span {
+  font-size: 10px;
+}
+
+.gratis-catalog-hero p {
+  font-size: 13px;
+}
+
+.catalog-hero-count span {
+  font-size: 9px;
+}
+
+.catalog-quick-categories b {
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.gratis-toolbar > span,
+.gratis-toolbar label,
+.gratis-toolbar select {
+  font-size: 10px;
+}
+
+.active-filter-row > small,
+.active-filter-row button {
+  font-size: 9px;
+}
+
+.gratis-filters .filter-title small {
+  font-size: 8px;
+}
+
+.gratis-filters .filter-title b {
+  font-size: 19px;
+}
+
+.stock-toggle {
+  font-size: 11px;
+}
+
+.filter-group h3 {
+  font-size: 10px;
+}
+
+.filter-options button {
+  min-height: 32px;
+  font-size: 10px;
+}
+
+.price-values {
+  font-size: 10px;
+}
+
+.gratis-filters .clear-filter {
+  font-size: 10px;
+}
+
+/* Product detail */
+.detail-brand-row .detail-brand {
+  font-size: 12px;
+}
+
+.detail-brand-row > span {
+  font-size: 9px;
+}
+
+.gratis-product-summary h1 {
+  font-size: 38px;
+}
+
+.detail-social-proof {
+  min-height: 34px;
+  font-size: 10px;
+}
+
+.detail-stars svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gratis-product-summary .short-description {
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.detail-sku {
+  font-size: 9px;
+}
+
+.gratis-price-box > div:first-child small,
+.gratis-price-box .old-price small {
+  font-size: 9px;
+}
+
+.gratis-price-box > div:first-child b {
+  font-size: 27px;
+}
+
+.gratis-price-box .old-price del {
+  font-size: 14px;
+}
+
+.gratis-price-box > span {
+  font-size: 10px;
+}
+
+.gratis-product-summary .detail-stock {
+  font-size: 11px;
+}
+
+.gratis-product-summary .detail-stock small {
+  font-size: 9px;
+}
+
+.gratis-product-summary .detail-options legend {
+  font-size: 10px;
+}
+
+.gratis-product-summary .variant-list button,
+.gratis-product-summary .detail-add,
+.gratis-product-summary .whatsapp {
+  font-size: 10px;
+}
+
+.detail-services b {
+  font-size: 9px;
+}
+
+.detail-services small {
+  font-size: 8px;
+}
+
+.gratis-product-content > nav a {
+  font-size: 11px;
+}
+
+.product-description-panel > div > small {
+  font-size: 9px;
+}
+
+.product-description-panel p {
+  font-size: 12px;
+}
+
+.product-description-panel h3 {
+  font-size: 12px;
+}
+
+.product-description-panel dl > div {
+  font-size: 10px;
+}
+
+.review-score small,
+.review-score p,
+.review-bars > div {
+  font-size: 9px;
+}
+
+.review-note b {
+  font-size: 11px;
+}
+
+.review-note span {
+  font-size: 10px;
+}
+
+.product-policy-grid p {
+  font-size: 11px;
+}
+
+.gratis-product-page + .public-branches > span {
+  font-size: 9px;
+}
+
+.public-branches article,
+.public-branches em {
+  font-size: 11px;
+}
+
+/* Admin remains compact, but primary information is readable. */
+.admin-nav nav a,
+.admin-store-link {
+  font-size: 11px;
+}
+
+.ref-admin-stats article > span,
+.ref-admin-stats article > small,
+.ref-admin-card h2 {
+  font-size: 10px;
+}
+
+.ref-ranked-list b,
+.ref-ranked-list em,
+.ref-alerts-card span,
+.ref-alerts-card span small {
+  font-size: 9px;
+}
+
+@media (max-width: 800px) {
+  .ref-header .head-actions span {
+    display: none;
+  }
+
+  .ref-hero-copy > span {
+    font-size: 8px;
+  }
+
+  .ref-hero-copy p {
+    font-size: 11px;
+  }
+
+  .ref-hero-copy > a {
+    font-size: 9px;
+  }
+
+  .ref-section-head h2,
+  .ref-section-head .ref-title h2,
+  .ref-title h2 {
+    font-size: 27px;
+  }
+
+  .ref-title > span {
+    font-size: 8px;
+  }
+
+  .ref-title p {
+    font-size: 10px;
+  }
+
+  .ref-section-head > a {
+    font-size: 8px;
+  }
+
+  .ref-category-grid b {
+    font-size: 10px;
+  }
+
+  .product-info > strong {
+    font-size: 9px !important;
+  }
+
+  .product-info h3,
+  .ref-products .product-info h3,
+  .gratis-catalog-grid .product-info h3,
+  .gratis-product-page .related .product-info h3 {
+    min-height: 34px;
+    font-size: 11px !important;
+  }
+
+  .card-rating span {
+    font-size: 9px;
+  }
+
+  .card-rating small,
+  .product-info .stock,
+  .product-info .card-swatches small {
+    font-size: 8px;
+  }
+
+  .prices b,
+  .ref-products .prices b {
+    font-size: 14px !important;
+  }
+
+  .ref-products .add-cart,
+  .gratis-catalog-grid .add-cart,
+  .gratis-product-page .related .add-cart {
+    font-size: 8px !important;
+  }
+
+  .catalog-quick-categories b {
+    font-size: 9px;
+  }
+
+  .gratis-toolbar .filter-trigger,
+  .gratis-toolbar select {
+    font-size: 9px;
+  }
+
+  .gratis-product-summary h1 {
+    font-size: 31px;
+  }
+
+  .detail-social-proof {
+    font-size: 9px;
+  }
+
+  .gratis-product-summary .short-description {
+    font-size: 11px;
+  }
+
+  .gratis-price-box > div:first-child b {
+    font-size: 22px;
+  }
+
+  .gratis-product-content > nav a {
+    font-size: 10px;
+  }
+
+  .product-description-panel p,
+  .product-policy-grid p {
+    font-size: 11px;
+  }
+}
