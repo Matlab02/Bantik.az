@@ -5,7 +5,27 @@ import { useState } from "react";
 
 const fallback = "/brand/product-placeholder.svg";
 
-export function SafeImage({ src: initialSrc, alt, ...props }: ImageProps) {
-  const [src, setSrc] = useState(initialSrc || fallback);
-  return <Image {...props} src={src} alt={alt} onError={() => setSrc(fallback)} />;
+type SafeImageProps = ImageProps & {
+  fallbackSrc?: ImageProps["src"];
+};
+
+export function SafeImage({
+  src: initialSrc,
+  fallbackSrc = fallback,
+  alt,
+  ...props
+}: SafeImageProps) {
+  const [failedSrc, setFailedSrc] = useState<ImageProps["src"] | null>(null);
+  const src = failedSrc === initialSrc ? fallbackSrc : initialSrc || fallbackSrc;
+
+  return (
+    <Image
+      {...props}
+      src={src}
+      alt={alt}
+      onError={() => {
+        if (src !== fallbackSrc) setFailedSrc(initialSrc);
+      }}
+    />
+  );
 }

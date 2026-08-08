@@ -50,6 +50,8 @@ export default async function Home() {
           <ResponsiveCmsImage
             desktop={hero?.desktopImage || "/campaigns/bantik-hero-v1.png"}
             mobile={hero?.mobileImage || "/campaigns/bantik-hero-mobile-v2.png"}
+            desktopFallback="/campaigns/bantik-hero-v1.png"
+            mobileFallback="/campaigns/bantik-hero-mobile-v2.png"
             alt={hero?.title || "BANTİK gözəllik kolleksiyası"}
             priority
           />
@@ -217,6 +219,8 @@ export default async function Home() {
             <ResponsiveCmsImage
               desktop={banner?.desktopImage || "/campaigns/bantik-fragrance-v1.png"}
               mobile={banner?.mobileImage || "/campaigns/bantik-fragrance-v1.png"}
+              desktopFallback="/campaigns/bantik-fragrance-v1.png"
+              mobileFallback="/campaigns/bantik-fragrance-v1.png"
               alt={banner?.title || "Yeni ətir kolleksiyası"}
             />
             <div>

@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, Menu, ShoppingBag, UserRound } from "lucide-react";
 import { SearchBox } from "@/components/commerce/search-box";
+import { useStore } from "@/components/commerce/store-provider";
 
 const menu = [
   ["Makiyaj", "makiyaj"],
@@ -15,6 +18,9 @@ const menu = [
 ];
 
 export function Header() {
+  const { cartCount } = useStore();
+  const visibleCartCount = cartCount > 99 ? "99+" : cartCount;
+
   return (
     <header className="site-header ref-header">
       <div className="benefit-bar">
@@ -47,10 +53,17 @@ export function Header() {
             <span>Seçilmişlər</span>
             <i />
           </Link>
-          <Link href="/cart" className="cart-action" aria-label="Səbət">
+          <Link
+            href="/cart"
+            className="cart-action"
+            aria-label={`Səbət, ${cartCount} məhsul`}
+            data-cart-target="header"
+          >
             <ShoppingBag />
             <span>Səbət</span>
-            <i />
+            {cartCount > 0 && (
+              <b className="nav-count" aria-live="polite">{visibleCartCount}</b>
+            )}
           </Link>
         </div>
       </div>

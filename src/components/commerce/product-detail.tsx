@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { type MouseEvent, useState } from "react";
 import {
   BadgeCheck,
   Check,
@@ -17,6 +17,7 @@ import {
   Truck,
 } from "lucide-react";
 import { CatalogProduct, money } from "@/lib/catalog";
+import { animateProductToCart } from "@/lib/cart-animation";
 import { useStore } from "./store-provider";
 import { ProductCard } from "./product-card";
 import { SafeImage } from "./safe-image";
@@ -43,10 +44,15 @@ export function ProductDetail({
   const reviewCount = 76 + (productNumber % 8) * 7;
   const favoriteCount = 1100 + productNumber * 37;
 
-  function add() {
+  function add(event: MouseEvent<HTMLButtonElement>) {
     for (let index = 0; index < qty; index += 1) {
       addToCart(product.id, [color, volume].filter(Boolean).join(" / "));
     }
+
+    const image = event.currentTarget
+      .closest<HTMLElement>(".product-page")
+      ?.querySelector<HTMLElement>(".primary-image img") || null;
+    animateProductToCart(image);
   }
 
   const message = `Salam, BANTİK saytından bu məhsulu sifariş etmək istəyirəm.\n\nMəhsul: ${product.name}\nKod: ${product.sku}\nVariant: ${color || "Standart"}\nHəcm: ${volume || "Standart"}\nLink: ${typeof window !== "undefined" ? window.location.href : ""}`;

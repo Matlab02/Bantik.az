@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { Heart, ShoppingBag } from "lucide-react";
+import type { MouseEvent } from "react";
 import { CatalogProduct, money } from "@/lib/catalog";
+import { animateProductToCart } from "@/lib/cart-animation";
 import { SafeImage } from "./safe-image";
 import { useStore } from "./store-provider";
 
@@ -13,6 +15,15 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
     ? Math.round((1 - product.price / product.compareAtPrice) * 100)
     : 0;
   const soldOut = product.stock === "Stokda yoxdur";
+
+  function handleAddToCart(event: MouseEvent<HTMLButtonElement>) {
+    const image = event.currentTarget
+      .closest<HTMLElement>(".product-card")
+      ?.querySelector<HTMLElement>(".product-image img") || null;
+
+    addToCart(product.id);
+    animateProductToCart(image);
+  }
 
   return (
     <article className="product-card">
@@ -66,7 +77,7 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
           type="button"
           className="add-cart"
           disabled={soldOut}
-          onClick={() => addToCart(product.id)}
+          onClick={handleAddToCart}
         >
           <ShoppingBag /> {soldOut ? "Stokda yoxdur" : "Səbətə əlavə et"}
         </button>
