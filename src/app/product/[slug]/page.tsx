@@ -5,7 +5,7 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 import { ProductDetail } from "@/components/commerce/product-detail";
 import { getProduct, products } from "@/lib/catalog";
 import { db } from "@/lib/db";
-import { publicSiteUrl } from "@/lib/env";
+import { publicSiteUrl } from "@/lib/public-env";
 import { safeJsonLd } from "@/lib/json-ld";
 import { resolveWhatsappNumber } from "@/lib/settings";
 export const dynamic = "force-dynamic";

@@ -3,7 +3,7 @@ import { Cormorant_Garamond, Manrope } from "next/font/google";
 
 import "./globals.css";
 import { StoreProvider } from "@/components/commerce/store-provider";
-import { publicSiteUrl } from "@/lib/env";
+import { publicSiteUrl } from "@/lib/public-env";
 import { safeJsonLd } from "@/lib/json-ld";
 
 const sans = Manrope({

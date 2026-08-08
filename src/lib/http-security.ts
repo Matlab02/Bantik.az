@@ -1,4 +1,4 @@
-import { publicSiteUrl } from "./env";
+import { publicSiteUrl } from "./public-env";
 
 export function assertSameOrigin(request: Request) {
   const origin = request.headers.get("origin");

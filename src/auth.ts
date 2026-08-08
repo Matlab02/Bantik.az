@@ -4,7 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 
 import { db } from "@/lib/db";
-import { env, isHttpsDeployment } from "@/lib/env";
+import { env } from "@/lib/env";
+import { isHttpsDeployment } from "@/lib/public-env";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { logger } from "@/lib/logger";
 

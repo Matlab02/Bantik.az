@@ -3,6 +3,17 @@ import { z } from "zod";
 
 const optionalUrl = z.union([z.url(), z.literal("")]).optional();
 
+const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+const vercelBuildHost =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+const buildSiteUrl = vercelBuildHost
+  ? `https://${vercelBuildHost.replace(/^https?:\/\//, "")}`
+  : "http://localhost:3000";
+const deploymentSiteUrl =
+  process.env.PUBLIC_SITE_URL ||
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (vercelBuildHost ? buildSiteUrl : undefined);
+
 const schema = z
   .object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -51,7 +62,31 @@ const schema = z
     }
   });
 
-const parsed = schema.safeParse(process.env);
+const runtimeEnvironment = {
+  ...process.env,
+  ...(deploymentSiteUrl
+    ? {
+        PUBLIC_SITE_URL: deploymentSiteUrl,
+        AUTH_URL:
+          process.env.AUTH_URL || process.env.NEXTAUTH_URL || deploymentSiteUrl,
+      }
+    : {}),
+};
+
+const environmentInput = isProductionBuild
+  ? {
+      ...runtimeEnvironment,
+      DATABASE_URL:
+        process.env.DATABASE_URL ||
+        "postgresql://next-build:next-build@127.0.0.1:5432/next_build_only",
+      AUTH_SECRET:
+        process.env.AUTH_SECRET || "next-build-only-secret-not-used-at-runtime",
+      PUBLIC_SITE_URL: deploymentSiteUrl || buildSiteUrl,
+      AUTH_URL: process.env.AUTH_URL || process.env.NEXTAUTH_URL || buildSiteUrl,
+    }
+  : runtimeEnvironment;
+
+const parsed = schema.safeParse(environmentInput);
 
 if (!parsed.success) {
   const message = parsed.error.issues
@@ -61,6 +96,3 @@ if (!parsed.success) {
 }
 
 export const env = parsed.data;
-export const publicSiteUrl =
-  env.PUBLIC_SITE_URL || env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-export const isHttpsDeployment = publicSiteUrl.startsWith("https://");

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { publicSiteUrl } from "@/lib/env";
+import { publicSiteUrl } from "@/lib/public-env";
 
 export default function robots(): MetadataRoute.Robots {
   return {
